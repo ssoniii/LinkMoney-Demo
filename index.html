@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Link Money — AI Feature Demos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0a2540;
+  --navy-90:#0d2d4a;
+  --navy-border:#1a3a55;
+  --green:#0f6e56;
+  --green-mid:#1a9070;
+  --green-bright:#1db888;
+  --green-pale:#e2f5ee;
+  --green-pale2:#f0faf6;
+  --text-primary:#0a2540;
+  --text-secondary:#4a5568;
+  --text-muted:#8a97a4;
+  --border:#e2e8f0;
+  --border-light:#f0f4f8;
+  --bg:#f7f9fc;
+  --surface:#ffffff;
+  --red:#dc2626;--red-pale:#fef2f2;
+  --amber:#d97706;--amber-pale:#fffbeb;
+  --blue-pale:#eff6ff;
+  --mono:'IBM Plex Mono',monospace;
+  --font:'Inter',system-ui,sans-serif;
+  --radius:10px;
+  --shadow:0 1px 3px rgba(10,37,64,.06),0 4px 16px rgba(10,37,64,.05);
+  --shadow-lg:0 4px 6px rgba(10,37,64,.06),0 10px 40px rgba(10,37,64,.1);
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--bg);color:var(--text-primary);-webkit-font-smoothing:antialiased;min-height:100vh}
+
+/* ─── TOPBAR ─── */
+.topbar{
+  background:var(--navy);
+  border-bottom:1px solid var(--navy-border);
+  padding:0 32px;
+  height:58px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:200;
+}
+.topbar-left{display:flex;align-items:center;gap:28px}
+.lm-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.lm-logo-mark{
+  width:30px;height:30px;background:var(--green-bright);border-radius:7px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:700;color:var(--navy);letter-spacing:-.5px;
+}
+.lm-logo-text{font-size:15px;font-weight:600;color:#fff;letter-spacing:-.01em}
+.topbar-nav{display:flex;gap:2px}
+.topbar-nav-item{
+  padding:6px 14px;font-size:13px;font-weight:400;color:rgba(255,255,255,.55);
+  border:none;background:transparent;cursor:pointer;border-radius:6px;
+  font-family:var(--font);transition:all .15s;
+}
+.topbar-nav-item:hover{color:rgba(255,255,255,.85)}
+.topbar-nav-item.active{background:rgba(255,255,255,.1);color:#fff;font-weight:500}
+.topbar-right{display:flex;align-items:center;gap:10px}
+.badge-demo{
+  font-size:11px;font-weight:500;letter-spacing:.04em;text-transform:uppercase;
+  padding:4px 10px;border-radius:20px;border:1px solid rgba(29,184,136,.4);
+  color:var(--green-bright);
+}
+.topbar-cta{
+  padding:7px 16px;background:var(--green-mid);color:#fff;border:none;border-radius:7px;
+  font-size:13px;font-weight:500;cursor:pointer;font-family:var(--font);
+  transition:background .15s;
+}
+.topbar-cta:hover{background:var(--green-bright);color:var(--navy)}
+
+/* ─── VIEWS ─── */
+.view{display:none;min-height:calc(100vh - 58px)}
+.view.active{display:block}
+
+/* ─── HERO ─── */
+.hero{
+  background:var(--navy);
+  padding:56px 32px 48px;
+  position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 70% 80% at 80% 50%, rgba(15,110,86,.25) 0%, transparent 60%);
+  pointer-events:none;
+}
+.hero-inner{max-width:840px;margin:0 auto;position:relative}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:7px;
+  font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--green-bright);margin-bottom:16px;
+}
+.hero-eyebrow-dot{width:6px;height:6px;border-radius:50%;background:var(--green-bright)}
+.hero-title{font-size:36px;font-weight:700;color:#fff;line-height:1.15;letter-spacing:-.02em;margin-bottom:12px}
+.hero-title span{color:var(--green-bright)}
+.hero-sub{font-size:15px;color:rgba(255,255,255,.6);line-height:1.6;max-width:560px;margin-bottom:28px}
+.hero-pills{display:flex;flex-wrap:wrap;gap:8px}
+.hero-pill{
+  display:flex;align-items:center;gap:6px;
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);
+  border-radius:20px;padding:5px 12px;font-size:12px;color:rgba(255,255,255,.7);
+}
+.hero-pill-dot{width:5px;height:5px;border-radius:50%;background:var(--green-bright)}
+
+/* ─── PAGE SHELL ─── */
+.page{max-width:920px;margin:0 auto;padding:32px 24px 64px}
+
+/* ─── SECTION ─── */
+.section-label{
+  font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--green);margin-bottom:6px;
+}
+.section-title{font-size:20px;font-weight:700;color:var(--navy);letter-spacing:-.02em;margin-bottom:4px}
+.section-sub{font-size:14px;color:var(--text-secondary);line-height:1.6;margin-bottom:24px}
+
+/* ─── CARDS ─── */
+.card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:12px;padding:20px;
+  box-shadow:var(--shadow);
+}
+.card+.card,.card+.row-2,.row-2+.card{margin-top:16px}
+
+/* ─── FIT ENGINE ─── */
+.fit-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+@media(max-width:700px){.fit-grid{grid-template-columns:1fr}}
+
+.field-label{font-size:12px;font-weight:500;color:var(--text-secondary);margin-bottom:6px}
+.fit-textarea{
+  width:100%;border:1.5px solid var(--border);border-radius:9px;padding:12px 14px;
+  font-size:14px;font-family:var(--font);resize:none;height:108px;
+  color:var(--text-primary);line-height:1.55;background:var(--surface);
+  transition:border-color .15s;
+}
+.fit-textarea:focus{outline:none;border-color:var(--green)}
+.fit-textarea::placeholder{color:var(--text-muted);font-size:13px}
+.fit-selects{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.fit-select{
+  border:1.5px solid var(--border);border-radius:8px;padding:9px 12px;
+  font-size:13px;font-family:var(--font);color:var(--text-primary);
+  background:var(--surface);width:100%;appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%238a97a4' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 10px center;padding-right:28px;
+}
+.fit-select:focus{outline:none;border-color:var(--green)}
+.btn-analyze{
+  margin-top:14px;width:100%;padding:11px;
+  background:var(--navy);color:#fff;border:none;border-radius:9px;
+  font-size:14px;font-weight:600;cursor:pointer;font-family:var(--font);
+  letter-spacing:-.01em;transition:background .15s;display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.btn-analyze:hover{background:var(--navy-90)}
+.btn-analyze:disabled{background:#cbd5e0;cursor:not-allowed}
+.btn-analyze svg{transition:transform .15s}
+.btn-analyze:hover svg{transform:translateX(2px)}
+
+.result-shell{min-height:340px;display:flex;flex-direction:column}
+.result-empty{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:8px;text-align:center;padding:20px;
+}
+.result-empty-icon{
+  width:44px;height:44px;border-radius:10px;background:var(--green-pale);
+  display:flex;align-items:center;justify-content:center;font-size:20px;
+}
+.result-empty p{font-size:13px;color:var(--text-muted);max-width:180px;line-height:1.5}
+.result-loading{flex:1;display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px}
+.spinner{width:26px;height:26px;border:2.5px solid var(--border);border-top-color:var(--green);border-radius:50%;animation:spin .75s linear infinite}
+.result-loading p{font-size:13px;color:var(--text-muted)}
+.result-out{display:none;flex-direction:column;gap:14px}
+
+.rec-products{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:2px}
+.product-chip{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:5px 11px;border-radius:20px;font-size:12px;font-weight:500;
+}
+.product-chip.primary{background:var(--navy);color:#fff}
+.product-chip.secondary{background:var(--green-pale);color:var(--green)}
+
+.conf-row{display:flex;align-items:center;gap:10px}
+.conf-label{font-size:11px;color:var(--text-muted);white-space:nowrap}
+.conf-track{flex:1;height:5px;background:var(--border-light);border-radius:3px;overflow:hidden}
+.conf-fill{height:100%;background:var(--green);border-radius:3px;transition:width .6s ease}
+.conf-val{font-size:12px;font-weight:600;color:var(--green);font-family:var(--mono);white-space:nowrap}
+
+.savings-box{
+  background:linear-gradient(135deg,var(--green-pale2) 0%,var(--green-pale) 100%);
+  border:1px solid rgba(15,110,86,.15);border-radius:10px;padding:14px 16px;
+}
+.savings-amount{font-size:26px;font-weight:700;color:var(--green);letter-spacing:-.02em}
+.savings-sub{font-size:12px;color:var(--text-secondary);margin-top:3px}
+
+.narrative{font-size:13px;line-height:1.65;color:var(--text-secondary)}
+.divider{border:none;border-top:1px solid var(--border-light);margin:4px 0}
+
+.sales-q-box{background:var(--blue-pale);border-radius:9px;padding:12px 14px}
+.sales-q-label{font-size:11px;font-weight:600;color:#3b82f6;text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px}
+.sales-q-text{font-size:13px;color:#1e40af;font-style:italic;line-height:1.5}
+
+.flags-row{font-size:12px;color:var(--text-muted)}
+.result-actions{display:flex;gap:8px;padding-top:4px}
+.btn-cta{padding:9px 18px;background:var(--green);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--font);transition:background .15s}
+.btn-cta:hover{background:var(--green-mid)}
+.btn-outline{padding:9px 16px;background:transparent;color:var(--text-secondary);border:1.5px solid var(--border);border-radius:8px;font-size:13px;cursor:pointer;font-family:var(--font);transition:all .15s}
+.btn-outline:hover{border-color:var(--text-secondary);color:var(--text-primary)}
+
+/* ─── SUCCESS SUITE ─── */
+.merchant-bar{
+  background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:12px 16px;display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:10px;margin-bottom:16px;box-shadow:var(--shadow);
+}
+.merchant-info{display:flex;align-items:center;gap:10px}
+.merchant-avatar{
+  width:34px;height:34px;border-radius:8px;background:var(--navy);
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:700;color:#fff;
+}
+.merchant-name{font-size:14px;font-weight:600;color:var(--navy)}
+.merchant-meta{font-size:12px;color:var(--text-muted);margin-top:1px}
+.status-pill{
+  display:inline-flex;align-items:center;gap:5px;
+  background:var(--green-pale);color:var(--green);
+  padding:4px 10px;border-radius:20px;font-size:12px;font-weight:500;
+}
+.status-dot{width:6px;height:6px;border-radius:50%;background:var(--green-bright);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}
+@media(max-width:620px){.kpi-row{grid-template-columns:repeat(2,1fr)}}
+.kpi{
+  background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:14px 16px;box-shadow:var(--shadow);
+}
+.kpi-val{font-size:21px;font-weight:700;color:var(--navy);letter-spacing:-.02em}
+.kpi-val.green{color:var(--green)}
+.kpi-lbl{font-size:11px;color:var(--text-muted);margin-top:3px}
+.kpi-delta{font-size:11px;font-weight:500;margin-top:4px}
+.kpi-delta.up{color:var(--green)}
+.kpi-delta.down{color:var(--red)}
+
+.suite-tabs-wrap{
+  background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:4px;display:grid;grid-template-columns:repeat(4,1fr);gap:3px;
+  margin-bottom:16px;box-shadow:var(--shadow);
+}
+.suite-tab{
+  padding:8px 6px;font-size:12px;font-weight:500;border:none;background:transparent;
+  border-radius:7px;cursor:pointer;font-family:var(--font);color:var(--text-muted);
+  transition:all .15s;text-align:center;line-height:1.3;
+}
+.suite-tab.active{background:var(--navy);color:#fff}
+.suite-tab:hover:not(.active){background:var(--border-light);color:var(--text-primary)}
+.suite-panel{display:none}
+.suite-panel.active{display:block}
+
+/* anomaly */
+.alert-stack{display:flex;flex-direction:column;gap:10px}
+.alert{
+  border:1px solid var(--border);border-radius:10px;padding:14px 16px;
+  background:var(--surface);display:flex;gap:12px;align-items:flex-start;
+  position:relative;overflow:hidden;
+}
+.alert::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px}
+.alert.sev-high::before{background:var(--red)}
+.alert.sev-medium::before{background:var(--amber)}
+.alert.sev-info::before{background:var(--green)}
+.alert-body{flex:1;min-width:0}
+.alert-title{font-size:13px;font-weight:600;color:var(--text-primary);margin-bottom:4px}
+.alert-detail{font-size:12px;color:var(--text-secondary);line-height:1.55}
+.alert-meta{font-size:11px;color:var(--text-muted);margin-top:5px;font-family:var(--mono)}
+.sev-badge{
+  flex-shrink:0;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600;
+  align-self:flex-start;
+}
+.sev-badge.high{background:var(--red-pale);color:var(--red)}
+.sev-badge.medium{background:var(--amber-pale);color:var(--amber)}
+.sev-badge.info{background:var(--green-pale);color:var(--green)}
+
+/* funnel */
+.funnel-row{
+  display:flex;align-items:center;gap:12px;
+  padding:10px 0;border-bottom:1px solid var(--border-light);
+}
+.funnel-row:last-child{border-bottom:none}
+.funnel-stage-label{font-size:13px;color:var(--text-secondary);min-width:190px}
+.funnel-track{flex:1;height:8px;background:var(--border-light);border-radius:4px;overflow:hidden}
+.funnel-fill{height:100%;border-radius:4px;background:var(--green);transition:width .6s ease}
+.funnel-fill.warn{background:var(--amber)}
+.funnel-pct{font-size:13px;font-weight:600;color:var(--text-primary);min-width:38px;text-align:right;font-family:var(--mono)}
+.funnel-bench{font-size:11px;color:var(--text-muted);min-width:96px;text-align:right}
+.funnel-warn-text{color:var(--amber);font-weight:500}
+
+.rec-stack{display:flex;flex-direction:column;gap:10px;margin-top:16px}
+.rec{
+  background:var(--blue-pale);border:1px solid rgba(59,130,246,.12);
+  border-radius:10px;padding:14px;display:flex;gap:12px;
+}
+.rec-num{
+  width:24px;height:24px;background:var(--navy);color:#fff;border-radius:50%;
+  font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;margin-top:1px;
+}
+.rec-content .rec-title{font-size:13px;font-weight:600;color:var(--navy)}
+.rec-content .rec-lift{font-size:12px;color:var(--green);font-weight:500;margin-top:2px}
+.rec-content .rec-desc{font-size:12px;color:var(--text-secondary);margin-top:4px;line-height:1.55}
+
+/* report */
+.report-card{border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:var(--shadow)}
+.report-head{background:var(--navy);padding:18px 22px}
+.report-head-title{font-size:15px;font-weight:600;color:#fff}
+.report-head-sub{font-size:12px;color:rgba(255,255,255,.5);margin-top:3px}
+.report-head-badge{
+  display:inline-flex;align-items:center;gap:5px;margin-top:10px;
+  background:rgba(29,184,136,.15);border:1px solid rgba(29,184,136,.3);
+  border-radius:20px;padding:4px 10px;font-size:11px;color:var(--green-bright);font-weight:500;
+}
+.report-body{padding:20px 22px;background:var(--surface)}
+.report-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px}
+@media(max-width:500px){.report-kpis{grid-template-columns:1fr}}
+.report-kpi{text-align:center;background:var(--bg);border-radius:9px;padding:14px}
+.report-kpi-val{font-size:21px;font-weight:700;color:var(--green)}
+.report-kpi-lbl{font-size:11px;color:var(--text-muted);margin-top:3px}
+.hr{border:none;border-top:1px solid var(--border-light);margin:16px 0}
+.report-narrative{font-size:13px;line-height:1.7;color:var(--text-secondary)}
+.report-narrative p+p{margin-top:10px}
+.ai-loading{display:flex;align-items:center;gap:10px;color:var(--text-muted);font-size:13px;padding:8px 0}
+.btn-generate{
+  width:100%;padding:11px;background:var(--green);color:#fff;border:none;
+  border-radius:9px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--font);
+  margin-top:14px;transition:background .15s;letter-spacing:-.01em;
+}
+.btn-generate:hover{background:var(--green-mid)}
+.btn-generate:disabled{background:#a0aec0;cursor:not-allowed}
+
+/* churn */
+.churn-stack{display:flex;flex-direction:column;gap:10px}
+.churn-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:14px 16px;display:flex;align-items:center;gap:14px;
+  box-shadow:var(--shadow);
+}
+.churn-avatar{
+  width:38px;height:38px;border-radius:9px;background:var(--bg);
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:700;color:var(--text-secondary);flex-shrink:0;
+  border:1px solid var(--border);
+}
+.churn-info{flex:1;min-width:0}
+.churn-name{font-size:13px;font-weight:600;color:var(--navy)}
+.churn-signals{font-size:12px;color:var(--text-muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.churn-right{display:flex;align-items:center;gap:12px}
+.churn-score-block{text-align:right}
+.churn-pct{font-size:20px;font-weight:700;letter-spacing:-.02em}
+.churn-pct.risk-high{color:var(--red)}
+.churn-pct.risk-medium{color:var(--amber)}
+.churn-pct.risk-low{color:var(--green)}
+.churn-pct-lbl{font-size:11px;color:var(--text-muted);margin-top:1px}
+.btn-outreach{
+  padding:7px 13px;border:1.5px solid var(--border);border-radius:7px;
+  font-size:12px;font-weight:500;cursor:pointer;font-family:var(--font);
+  background:var(--surface);color:var(--text-secondary);transition:all .15s;white-space:nowrap;
+}
+.btn-outreach:hover:not(:disabled){border-color:var(--navy);color:var(--navy)}
+.btn-outreach:disabled{opacity:.35;cursor:default}
+
+.info-box{
+  background:var(--bg);border:1px solid var(--border);border-radius:9px;
+  padding:12px 14px;font-size:12px;color:var(--text-muted);line-height:1.6;margin-top:12px;
+}
+.info-box strong{color:var(--text-secondary)}
+
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.fade-up{animation:fadeUp .3s ease forwards}
+</style>
+</head>
+<body>
+
+<!-- ─── TOPBAR ─── -->
+<header class="topbar">
+  <div class="topbar-left">
+    <a class="lm-logo" href="#">
+      <div class="lm-logo-mark">L</div>
+      <span class="lm-logo-text">Link Money</span>
+    </a>
+    <nav class="topbar-nav">
+      <button class="topbar-nav-item active" onclick="showView('fit',this)">Merchant Fit Engine</button>
+      <button class="topbar-nav-item" onclick="showView('suite',this)">Success Suite</button>
+    </nav>
+  </div>
+  <div class="topbar-right">
+    <span class="badge-demo">AI Demo</span>
+    <button class="topbar-cta">Book a demo</button>
+  </div>
+</header>
+
+<!-- ═══════════ FIT ENGINE VIEW ═══════════ -->
+<div id="view-fit" class="view active">
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="hero-eyebrow"><div class="hero-eyebrow-dot"></div>Feature 1 — Merchant Fit Engine</div>
+      <h1 class="hero-title">Find your <span>exact</span> product fit<br>in under 60 seconds</h1>
+      <p class="hero-sub">Describe your business in plain language. Our AI maps your situation to the right Link Money products and estimates your savings — so your first conversation with our team starts at evaluation, not explanation.</p>
+      <div class="hero-pills">
+        <div class="hero-pill"><div class="hero-pill-dot"></div>RAG-powered product matching</div>
+        <div class="hero-pill"><div class="hero-pill-dot"></div>Live savings estimate</div>
+        <div class="hero-pill"><div class="hero-pill-dot"></div>Sales-ready handoff</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page">
+    <div class="fit-grid">
+      <!-- Input -->
+      <div class="card">
+        <div class="field-label">Tell us about your business</div>
+        <textarea class="fit-textarea" id="fitInput" placeholder="e.g. We run a subscription e-commerce platform, ~8,000 active subscribers paying $45/month. Currently on Stripe. Getting hit hard by chargebacks on cancellations and the card fees are eating into our margin…"></textarea>
+        <div class="fit-selects">
+          <select class="fit-select" id="fitVolume">
+            <option value="">Monthly volume</option>
+            <option value="under50k">Under $50K</option>
+            <option value="50k_500k">$50K – $500K</option>
+            <option value="500k_5m">$500K – $5M</option>
+            <option value="over5m">Over $5M</option>
+          </select>
+          <select class="fit-select" id="fitProcessor">
+            <option value="">Current processor</option>
+            <option value="stripe">Stripe (2.9% + $0.30)</option>
+            <option value="paypal">PayPal (3.49% + $0.49)</option>
+            <option value="square">Square (2.6% + $0.10)</option>
+            <option value="braintree">Braintree (2.59% + $0.49)</option>
+            <option value="ach">Traditional ACH</option>
+            <option value="other">Other / Custom</option>
+          </select>
+        </div>
+        <button class="btn-analyze" id="fitBtn" onclick="runFit()">
+          Analyze my business
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+
+      <!-- Result -->
+      <div class="card result-shell">
+        <div class="result-empty" id="fitEmpty">
+          <div class="result-empty-icon">◎</div>
+          <p>Your product recommendation and savings estimate will appear here</p>
+        </div>
+        <div class="result-loading" id="fitLoading">
+          <div class="spinner"></div>
+          <p>Analyzing your business…</p>
+        </div>
+        <div class="result-out fade-up" id="fitOut"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ SUCCESS SUITE VIEW ═══════════ -->
+<div id="view-suite" class="view">
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="hero-eyebrow"><div class="hero-eyebrow-dot"></div>Feature 4 — Success Suite</div>
+      <h1 class="hero-title">AI-powered merchant<br><span>success intelligence</span></h1>
+      <p class="hero-sub">Anomaly detection, adoption intelligence, CFO reporting, and churn prediction — built to shift merchant success from reactive to proactive.</p>
+      <div class="hero-pills">
+        <div class="hero-pill"><div class="hero-pill-dot"></div>Per-merchant anomaly baselines</div>
+        <div class="hero-pill"><div class="hero-pill-dot"></div>AI-generated CFO reports</div>
+        <div class="hero-pill"><div class="hero-pill-dot"></div>Churn prediction scoring</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page">
+    <!-- Merchant bar -->
+    <div class="merchant-bar">
+      <div class="merchant-info">
+        <div class="merchant-avatar">NS</div>
+        <div>
+          <div class="merchant-name">Northside Supply Co.</div>
+          <div class="merchant-meta">Mid-size e-commerce &middot; $1.8M/mo &middot; Pay by Bank since Jan 2026</div>
+        </div>
+      </div>
+      <div class="status-pill"><div class="status-dot"></div>Pay by Bank Active</div>
+    </div>
+
+    <!-- KPIs -->
+    <div class="kpi-row">
+      <div class="kpi">
+        <div class="kpi-val green">24.3%</div>
+        <div class="kpi-lbl">PbB adoption rate</div>
+        <div class="kpi-delta up">↑ 3.1 pts vs last month</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-val">$41,200</div>
+        <div class="kpi-lbl">Fees saved this month</div>
+        <div class="kpi-delta up">↑ 12% vs last month</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-val">6,840</div>
+        <div class="kpi-lbl">Transactions via PbB</div>
+        <div class="kpi-delta up">↑ 18% week-over-week</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-val green">0.4%</div>
+        <div class="kpi-lbl">Return rate</div>
+        <div class="kpi-delta up">↓ vs 1.8% on prior cards</div>
+      </div>
+    </div>
+
+    <!-- Suite tabs -->
+    <div class="suite-tabs-wrap">
+      <button class="suite-tab active" onclick="switchSuite('anomaly',this)">⚡ Anomaly Detection</button>
+      <button class="suite-tab" onclick="switchSuite('adoption',this)">📈 Adoption Intel</button>
+      <button class="suite-tab" onclick="switchSuite('report',this)">📄 CFO Report</button>
+      <button class="suite-tab" onclick="switchSuite('churn',this)">🔔 Churn Signals</button>
+    </div>
+
+    <!-- ANOMALY -->
+    <div class="suite-panel active" id="sp-anomaly">
+      <div class="card">
+        <div style="font-size:12px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:14px">Active alerts — last 72 hours</div>
+        <div class="alert-stack">
+          <div class="alert sev-high">
+            <div class="alert-body">
+              <div class="alert-title">Mobile completion rate dropped 31% vs. 30-day baseline</div>
+              <div class="alert-detail">Pay by Bank checkout completions on mobile fell from 68% to 47% between Tuesday 11pm and Wednesday 8am. This pattern has preceded increased cart abandonment in 7 of 9 similar merchants where it occurred.</div>
+              <div class="alert-meta">Detected 6h ago &middot; Review mobile SDK version and OAuth timeout settings</div>
+            </div>
+            <span class="sev-badge high">High</span>
+          </div>
+          <div class="alert sev-medium">
+            <div class="alert-body">
+              <div class="alert-title">Return rate on $200–$400 orders up 2.1× this week</div>
+              <div class="alert-detail">Return rate in this band moved from 0.3% to 0.63%. Isolated to this transaction cohort — other sizes are within normal range. May indicate a specific customer segment issue.</div>
+              <div class="alert-meta">Detected 18h ago &middot; Monitoring — no action required yet</div>
+            </div>
+            <span class="sev-badge medium">Medium</span>
+          </div>
+          <div class="alert sev-info">
+            <div class="alert-body">
+              <div class="alert-title">Pay by Bank volume up 18% week-over-week — positive deviation</div>
+              <div class="alert-detail">Volume increase is above seasonal expectation (+6% expected). Likely driven by the checkout placement update made last Thursday. Continue monitoring to confirm the lift is sustained.</div>
+              <div class="alert-meta">Detected 2d ago &middot; Sustained for 5 days</div>
+            </div>
+            <span class="sev-badge info">Info</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADOPTION -->
+    <div class="suite-panel" id="sp-adoption">
+      <div class="card">
+        <div style="font-size:12px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:14px">Checkout funnel — Pay by Bank</div>
+        <div class="funnel-row"><div class="funnel-stage-label">PbB option shown</div><div class="funnel-track"><div class="funnel-fill" style="width:100%"></div></div><div class="funnel-pct">100%</div><div class="funnel-bench">Peer avg: 100%</div></div>
+        <div class="funnel-row"><div class="funnel-stage-label">Customer selects PbB</div><div class="funnel-track"><div class="funnel-fill" style="width:38%"></div></div><div class="funnel-pct">38%</div><div class="funnel-bench">Peer avg: 41%</div></div>
+        <div class="funnel-row"><div class="funnel-stage-label">Bank linking initiated</div><div class="funnel-track"><div class="funnel-fill warn" style="width:62%"></div></div><div class="funnel-pct">62%</div><div class="funnel-bench"><span class="funnel-warn-text">Peer avg: 79% ⚠</span></div></div>
+        <div class="funnel-row"><div class="funnel-stage-label">Bank linking completed</div><div class="funnel-track"><div class="funnel-fill warn" style="width:71%"></div></div><div class="funnel-pct">71%</div><div class="funnel-bench"><span class="funnel-warn-text">Peer avg: 82% ⚠</span></div></div>
+        <div class="funnel-row"><div class="funnel-stage-label">Payment confirmed</div><div class="funnel-track"><div class="funnel-fill" style="width:96%"></div></div><div class="funnel-pct">96%</div><div class="funnel-bench">Peer avg: 95%</div></div>
+      </div>
+      <div class="card" style="margin-top:14px">
+        <div style="font-size:12px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px">AI-ranked recommendations</div>
+        <div class="rec-stack">
+          <div class="rec"><div class="rec-num">1</div><div class="rec-content"><div class="rec-title">Add a one-line trust message at the bank linking step</div><div class="rec-lift">+14% avg completion rate across comparable merchants</div><div class="rec-desc">Merchants at your volume and transaction size who added "Your bank credentials are never stored or seen by us" at the OAuth screen saw the largest single-intervention lift in linking completion.</div></div></div>
+          <div class="rec"><div class="rec-num">2</div><div class="rec-content"><div class="rec-title">Surface Pay by Bank before card options in checkout</div><div class="rec-lift">+9% avg PbB selection rate across comparable merchants</div><div class="rec-desc">Moving PbB above card entry fields increased selection rate by 9% across 12 merchants in your cohort without reducing overall checkout completion.</div></div></div>
+          <div class="rec"><div class="rec-num">3</div><div class="rec-content"><div class="rec-title">Offer a one-time incentive on first PbB use</div><div class="rec-lift">+22% first-time PbB conversion across comparable merchants</div><div class="rec-desc">A $5 discount or free shipping on the first Pay by Bank checkout converts hesitant first-timers. Repeat PbB usage after the first transaction is high in subscription-adjacent merchants.</div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- REPORT -->
+    <div class="suite-panel" id="sp-report">
+      <div class="report-card">
+        <div class="report-head">
+          <div class="report-head-title">Northside Supply Co. — Pay by Bank Savings Report</div>
+          <div class="report-head-sub">May 2026 &middot; Generated by Link Money Success Suite</div>
+          <div class="report-head-badge"><div class="hero-pill-dot"></div>AI-generated narrative</div>
+        </div>
+        <div class="report-body">
+          <div class="report-kpis">
+            <div class="report-kpi"><div class="report-kpi-val">$41,200</div><div class="report-kpi-lbl">Fees saved this month</div></div>
+            <div class="report-kpi"><div class="report-kpi-val">$3,187</div><div class="report-kpi-lbl">Chargebacks avoided</div></div>
+            <div class="report-kpi"><div class="report-kpi-val">$203,400</div><div class="report-kpi-lbl">YTD cumulative savings</div></div>
+          </div>
+          <div class="hr"></div>
+          <div id="reportContent">
+            <button class="btn-generate" id="genBtn" onclick="generateReport()">Generate AI narrative summary →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CHURN -->
+    <div class="suite-panel" id="sp-churn">
+      <div class="card">
+        <div style="font-size:12px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:14px">Merchant cohort — churn risk scores</div>
+        <div class="churn-stack">
+          <div class="churn-card">
+            <div class="churn-avatar">GH</div>
+            <div class="churn-info">
+              <div class="churn-name">Greenhill Home Goods</div>
+              <div class="churn-signals">Adoption down 38% over 30d &middot; 3 support tickets &middot; last login 9 days ago</div>
+            </div>
+            <div class="churn-right">
+              <div class="churn-score-block"><div class="churn-pct risk-high">81%</div><div class="churn-pct-lbl">churn risk</div></div>
+              <button class="btn-outreach">Outreach →</button>
+            </div>
+          </div>
+          <div class="churn-card">
+            <div class="churn-avatar">PR</div>
+            <div class="churn-info">
+              <div class="churn-name">Primrose Running Co.</div>
+              <div class="churn-signals">Volume down 22% over 14d &middot; 1 support ticket &middot; evaluating competitor</div>
+            </div>
+            <div class="churn-right">
+              <div class="churn-score-block"><div class="churn-pct risk-medium">54%</div><div class="churn-pct-lbl">churn risk</div></div>
+              <button class="btn-outreach">Outreach →</button>
+            </div>
+          </div>
+          <div class="churn-card">
+            <div class="churn-avatar" style="background:var(--green-pale);color:var(--green);border-color:rgba(15,110,86,.2)">NS</div>
+            <div class="churn-info">
+              <div class="churn-name">Northside Supply Co. <span style="font-size:11px;color:var(--text-muted);font-weight:400">(current view)</span></div>
+              <div class="churn-signals">Adoption stable &middot; volume growing &middot; 0 support tickets last 30d</div>
+            </div>
+            <div class="churn-right">
+              <div class="churn-score-block"><div class="churn-pct risk-low">12%</div><div class="churn-pct-lbl">churn risk</div></div>
+              <button class="btn-outreach" disabled>Healthy</button>
+            </div>
+          </div>
+        </div>
+        <div class="info-box"><strong>About these scores.</strong> Churn risk is modeled on behavioral signals: Pay by Bank adoption trend, transaction volume trajectory, support contact frequency, login recency, and deviation from each merchant's own historical baseline. Scores update weekly. Merchants above 60% are prioritized for proactive outreach by the merchant success team.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const PRODUCTS={
+  payByBank:{name:'Pay by Bank',desc:'Customers pay directly from their bank account at checkout. Eliminates card interchange, includes real-time fund guarantee, and uses behavioral decisioning to reduce fraud and returns. Best for repeat-customer businesses, subscription billing, and merchants where card fees are a significant cost burden.'},
+  accountVerify:{name:'AccountVerify',desc:'Fast, Nacha-compliant bank account verification. Confirms a customer is connecting a real, funded account. Used by lenders and platforms that need to verify accounts before initiating ACH or Pay by Bank payments.'},
+  dynamicLinks:{name:'Dynamic Links',desc:'No-code payment link generation. Merchants send links via SMS or email — customers complete bank-based payment without visiting a web checkout. For out-of-session billing, invoicing, or businesses without a digital checkout flow.'},
+  payouts:{name:'Payouts',desc:'Outbound payments to customer or contractor bank accounts. Same-day settlement to 95% of US banks. For gig platforms, insurance carriers, lenders, and any business that moves money out as well as in.'},
+  indicators:{name:'Indicators',desc:'Risk signals and data insights from Open Banking data — balances, transaction history, behavioral patterns. For fraud teams, lenders, and merchants building custom risk models on top of bank data.'}
+};
+
+const FEE={
+  stripe:{pct:2.9,fixed:0.30},
+  paypal:{pct:3.49,fixed:0.49},
+  square:{pct:2.6,fixed:0.10},
+  braintree:{pct:2.59,fixed:0.49},
+  ach:{pct:0.8,fixed:0.25},
+  other:{pct:2.75,fixed:0.30}
+};
+const LM={pct:1.5,fixed:0.50};
+
+function showView(id,btn){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.topbar-nav-item').forEach(b=>b.classList.remove('active'));
+  document.getElementById('view-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+
+function switchSuite(id,btn){
+  document.querySelectorAll('.suite-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.suite-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('sp-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+
+async function runFit(){
+  const input=document.getElementById('fitInput').value.trim();
+  if(!input){alert('Please describe your business first.');return;}
+  const vol=document.getElementById('fitVolume').value;
+  const proc=document.getElementById('fitProcessor').value;
+
+  document.getElementById('fitEmpty').style.display='none';
+  document.getElementById('fitLoading').style.display='flex';
+  document.getElementById('fitOut').style.display='none';
+  document.getElementById('fitBtn').disabled=true;
+
+  const volLabel={under50k:'under $50K','50k_500k':'$50K–$500K','500k_5m':'$500K–$5M',over5m:'over $5M'}[vol]||'unspecified';
+  const procLabel=proc||'unspecified processor';
+
+  const sys=`You are the Link Money Merchant Fit Engine. Link Money is a US-focused open banking payments company.
+
+Products:
+1. Pay by Bank: Customers pay directly from their bank account at checkout. Three layers: (a) bank account linking via OAuth/Mastercard open banking, (b) behavioral decisioning layer using balances, transaction history, and chargeback signals to guarantee or decline payments, (c) ACH-based money movement. Link Money charges approximately 1.5% + $0.50 flat vs. typical card rates of 2–4% + fixed fees. Eliminates interchange, reduces fraud, includes Link Guarantee (if Link Money accepts a transaction and customer can't pay, Link Money makes the merchant whole). Best for: repeat customers, subscription billing, e-commerce, insurance premiums, lending repayments, utilities — any merchant with high card fees or chargeback exposure.
+2. AccountVerify: Nacha-compliant bank account verification before transactions. Confirms real, funded accounts. For lenders and platforms needing pre-payment verification.
+3. Dynamic Links: No-code payment links sent via SMS or email for out-of-session billing. No web checkout required.
+4. Payouts: Outbound bank payments to customers/contractors. Same-day to 95% of US banks. For gig platforms, insurance, lenders moving money out.
+5. Indicators: Open Banking risk signals and data insights — balances, behavior, transaction history — for fraud teams and lenders building custom risk models.
+
+Return ONLY a JSON object, no markdown, no explanation, with this exact shape:
+{"primaryProduct":"payByBank|accountVerify|dynamicLinks|payouts|indicators","secondaryProducts":["product keys from above"],"fitScore":0-100,"fitReason":"2-3 sentences on why this fit","savingsAngle":"the specific cost or problem most addressable","suggestedQuestion":"one question for the sales rep to ask first","flags":["any caveats as short strings, empty array if none"]}`;
+
+  let d=null;
+  try{
+    const r=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,system:sys,messages:[{role:'user',content:`Business: ${input}\nVolume: ${volLabel}\nProcessor: ${procLabel}`}]})
+    });
+    const j=await r.json();
+    const raw=j.content.filter(b=>b.type==='text').map(b=>b.text).join('');
+    d=JSON.parse(raw.replace(/```json|```/g,'').trim());
+  }catch(e){
+    d={primaryProduct:'payByBank',secondaryProducts:[],fitScore:74,fitReason:'Pay by Bank directly addresses the cost and chargeback issues you described. The behavioral decisioning layer is purpose-built for repeat-customer scenarios.',savingsAngle:'Interchange fee elimination and chargeback reduction',suggestedQuestion:'What percentage of your customers are repeat buyers vs. first-time?',flags:['AI unavailable — showing estimated result']};
+  }
+
+  renderFit(d,vol,proc);
+}
+
+function renderFit(d,vol,proc){
+  const rates=FEE[proc]||FEE.other;
+  const volMap={under50k:25000,'50k_500k':250000,'500k_5m':2500000,over5m:7500000};
+  const mv=volMap[vol]||0;
+  const avgTxn=80;
+  const n=mv/avgTxn;
+  const curFees=mv*(rates.pct/100)+n*rates.fixed;
+  const lmFees=mv*(LM.pct/100)+n*LM.fixed;
+  const saved=Math.max(0,curFees-lmFees);
+  const pct=curFees>0?Math.round((saved/curFees)*100):72;
+
+  const primary=PRODUCTS[d.primaryProduct]||PRODUCTS.payByBank;
+  const secTags=(d.secondaryProducts||[]).filter(p=>PRODUCTS[p]).map(p=>`<span class="product-chip secondary">+ ${PRODUCTS[p].name}</span>`).join('');
+
+  document.getElementById('fitLoading').style.display='none';
+  document.getElementById('fitOut').style.display='flex';
+  document.getElementById('fitOut').innerHTML=`
+    <div class="rec-products">
+      <span class="product-chip primary">${primary.name}</span>${secTags}
+    </div>
+    <div>
+      <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:.05em;font-weight:500">Fit confidence</div>
+      <div class="conf-row">
+        <div class="conf-track"><div class="conf-fill" style="width:${d.fitScore}%"></div></div>
+        <div class="conf-val">${d.fitScore}%</div>
+      </div>
+    </div>
+    ${mv>0?`
+    <div class="savings-box">
+      <div class="savings-amount">$${Math.round(saved).toLocaleString()}<span style="font-size:14px;font-weight:500">/mo</span></div>
+      <div class="savings-sub">vs. est. $${Math.round(curFees).toLocaleString()}/mo on ${document.getElementById('fitProcessor').options[document.getElementById('fitProcessor').selectedIndex].text.split(' ')[0]||'current processor'} &middot; ${pct}% reduction</div>
+    </div>`:`
+    <div class="savings-box">
+      <div class="savings-amount">~70–80%</div>
+      <div class="savings-sub">estimated fee reduction with Pay by Bank &middot; add volume above for a dollar estimate</div>
+    </div>`}
+    <div class="divider"></div>
+    <div class="narrative">${d.fitReason}</div>
+    ${d.flags&&d.flags.length?`<div style="font-size:12px;color:var(--text-muted);padding-top:2px">⚠ ${d.flags.join(' &middot; ')}</div>`:''}
+    <div class="divider"></div>
+    <div class="sales-q-box">
+      <div class="sales-q-label">Suggested first question for sales</div>
+      <div class="sales-q-text">"${d.suggestedQuestion}"</div>
+    </div>
+    <div class="result-actions">
+      <button class="btn-cta">Request a demo →</button>
+      <button class="btn-outline" onclick="resetFit()">Try another</button>
+    </div>`;
+  document.getElementById('fitBtn').disabled=false;
+}
+
+function resetFit(){
+  document.getElementById('fitInput').value='';
+  document.getElementById('fitOut').style.display='none';
+  document.getElementById('fitEmpty').style.display='flex';
+}
+
+async function generateReport(){
+  const btn=document.getElementById('genBtn');
+  btn.disabled=true;btn.textContent='Generating…';
+  document.getElementById('reportContent').innerHTML=`<div class="ai-loading"><div class="spinner"></div><span>Writing your narrative summary…</span></div>`;
+
+  const prompt=`You are writing the narrative section of a monthly Pay by Bank savings report for Northside Supply Co., a mid-size e-commerce merchant.
+
+Data:
+- Monthly volume: $1.8M
+- Pay by Bank adoption rate: 24.3% (up 3.1 points month-over-month)
+- Fees saved this month: $41,200 (up 12% vs prior month of $36,800)
+- Chargebacks avoided: $3,187
+- YTD cumulative savings: $203,400
+- Primary driver: checkout placement update made earlier in the month
+
+Write exactly two concise paragraphs, no headers, no bullet points, suitable for a CFO. First paragraph: what happened this month and what drove it. Second paragraph: YTD context and what could further increase savings. Be specific, use the numbers, professional but readable tone. Do not use em dashes.`;
+
+  let text='';
+  try{
+    const r=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:400,messages:[{role:'user',content:prompt}]})
+    });
+    const j=await r.json();
+    text=j.content.filter(b=>b.type==='text').map(b=>b.text).join('').trim();
+  }catch(e){
+    text=`Northside Supply Co. saved $41,200 in payment processing fees in May 2026, a 12% improvement over April's $36,800. This increase was driven primarily by a 3.1-point rise in Pay by Bank adoption following a checkout placement update earlier in the month, reducing reliance on higher-cost card rails for a larger share of transaction volume.\n\nYear-to-date, Northside has accumulated $203,400 in total savings since activating Pay by Bank. At current adoption rates, annualized savings are tracking toward approximately $490,000. Closing the gap between the current 24.3% adoption rate and the 32% peer benchmark would add an estimated $68,000 in additional annual savings, achievable through the bank linking trust message and checkout positioning improvements flagged in this month's adoption report.`;
+  }
+
+  const paras=text.split(/\n\n+/).filter(Boolean);
+  document.getElementById('reportContent').innerHTML=`<div class="report-narrative fade-up">${paras.map(p=>`<p>${p}</p>`).join('')}</div>`;
+}
+</script>
+</body>
+</html>
