@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Link Money | Open Banking Payments</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0a2540;--navy2:#0d2e4e;
+  --green:#0f6e56;--green2:#1a9070;--green3:#1db888;
+  --green-pale:#e2f5ee;--green-pale2:#f0faf6;
+  --text:#1a2532;--text2:#4a5568;--text3:#8a97a4;
+  --border:#e2e8f0;--border2:#f0f4f8;
+  --bg:#f7f9fc;--white:#ffffff;
+  --red:#dc2626;--red-pale:#fef2f2;
+  --amber:#d97706;--amber-pale:#fffbeb;
+  --blue-pale:#eff6ff;
+  --mono:'IBM Plex Mono',monospace;
+  --font:'Inter',system-ui,sans-serif;
+  --shadow:0 1px 3px rgba(10,37,64,.07),0 4px 16px rgba(10,37,64,.05);
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);color:var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+
+/* ─── NAV ─── */
+.nav{
+  position:sticky;top:0;z-index:300;
+  background:var(--white);border-bottom:1px solid var(--border);
+  padding:0 40px;height:64px;display:flex;align-items:center;justify-content:space-between;
+}
+.nav-logo{display:flex;align-items:center;gap:8px;text-decoration:none}
+.nav-logo-icon{
+  width:32px;height:32px;background:var(--navy);border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+}
+.nav-logo-icon svg{width:18px;height:18px}
+.nav-logo-text{font-size:17px;font-weight:700;color:var(--navy);letter-spacing:-.02em}
+.nav-links{display:flex;align-items:center;gap:28px}
+.nav-link{font-size:14px;color:var(--text2);text-decoration:none;font-weight:400;transition:color .15s}
+.nav-link:hover{color:var(--navy)}
+.nav-right{display:flex;align-items:center;gap:12px}
+.nav-btn-ghost{padding:8px 18px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-weight:500;color:var(--navy);background:var(--white);cursor:pointer;font-family:var(--font);transition:all .15s}
+.nav-btn-ghost:hover{border-color:var(--navy)}
+.nav-btn-primary{padding:8px 18px;border:none;border-radius:8px;font-size:14px;font-weight:600;color:var(--white);background:var(--navy);cursor:pointer;font-family:var(--font);transition:background .15s}
+.nav-btn-primary:hover{background:var(--navy2)}
+
+/* ─── HERO ─── */
+.hero{
+  background:var(--navy);
+  padding:80px 40px 0;
+  min-height:580px;display:flex;align-items:flex-start;
+  position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 60% 70% at 75% 40%,rgba(15,110,86,.3) 0%,transparent 65%);
+  pointer-events:none;
+}
+.hero-inner{max-width:1100px;margin:0 auto;width:100%;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;position:relative;padding-bottom:80px}
+.hero-left{}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:7px;
+  background:rgba(29,184,136,.12);border:1px solid rgba(29,184,136,.25);
+  border-radius:20px;padding:5px 12px;
+  font-size:12px;font-weight:500;color:var(--green3);letter-spacing:.02em;
+  margin-bottom:20px;
+}
+.hero-eyebrow-dot{width:5px;height:5px;border-radius:50%;background:var(--green3)}
+.hero-h1{font-size:44px;font-weight:700;color:#fff;line-height:1.1;letter-spacing:-.03em;margin-bottom:16px}
+.hero-h1 span{color:var(--green3)}
+.hero-sub{font-size:16px;color:rgba(255,255,255,.6);line-height:1.65;margin-bottom:32px;max-width:440px}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap}
+.btn-hero-primary{
+  padding:13px 24px;background:var(--green2);color:#fff;border:none;border-radius:9px;
+  font-size:15px;font-weight:600;cursor:pointer;font-family:var(--font);
+  transition:background .15s;letter-spacing:-.01em;
+}
+.btn-hero-primary:hover{background:var(--green3);color:var(--navy)}
+
+/* ── NEW: AI badge button ── */
+.btn-hero-ai{
+  padding:13px 24px;
+  background:rgba(255,255,255,.08);
+  border:1.5px solid rgba(29,184,136,.45);
+  color:var(--green3);border-radius:9px;
+  font-size:15px;font-weight:600;cursor:pointer;font-family:var(--font);
+  transition:all .2s;letter-spacing:-.01em;
+  display:flex;align-items:center;gap:8px;
+}
+.btn-hero-ai:hover{background:rgba(29,184,136,.15);border-color:var(--green3)}
+.ai-spark{font-size:16px}
+.hero-right{display:flex;flex-direction:column;gap:14px}
+.stat-card{
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);
+  border-radius:12px;padding:16px 20px;
+}
+.stat-card-val{font-size:28px;font-weight:700;color:#fff;letter-spacing:-.02em}
+.stat-card-val span{color:var(--green3)}
+.stat-card-lbl{font-size:13px;color:rgba(255,255,255,.5);margin-top:3px}
+
+/* ─── WHY SECTION ─── */
+.why{background:var(--white);padding:80px 40px}
+.why-inner{max-width:1100px;margin:0 auto}
+.section-label{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--green);margin-bottom:8px}
+.section-h2{font-size:32px;font-weight:700;color:var(--navy);letter-spacing:-.02em;margin-bottom:8px}
+.section-sub{font-size:15px;color:var(--text2);line-height:1.6;margin-bottom:48px;max-width:520px}
+.why-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+@media(max-width:800px){.why-grid{grid-template-columns:repeat(2,1fr)}}
+.why-card{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:20px}
+.why-icon{width:38px;height:38px;background:var(--green-pale);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:12px}
+.why-title{font-size:14px;font-weight:600;color:var(--navy);margin-bottom:6px}
+.why-desc{font-size:13px;color:var(--text2);line-height:1.55}
+
+/* ─── AI FEATURES STRIP ─── */
+.ai-strip{
+  background:linear-gradient(135deg,var(--navy) 0%,#0d3a2a 100%);
+  padding:64px 40px;position:relative;overflow:hidden;
+}
+.ai-strip::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 50% 80% at 90% 50%,rgba(29,184,136,.2) 0%,transparent 60%);
+  pointer-events:none;
+}
+.ai-strip-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;position:relative}
+.ai-strip-left{}
+.ai-strip-eyebrow{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(29,184,136,.12);border:1px solid rgba(29,184,136,.25);
+  border-radius:20px;padding:4px 11px;font-size:11px;font-weight:600;color:var(--green3);
+  letter-spacing:.06em;text-transform:uppercase;margin-bottom:16px;
+}
+.ai-strip-h2{font-size:30px;font-weight:700;color:#fff;letter-spacing:-.02em;line-height:1.2;margin-bottom:12px}
+.ai-strip-h2 span{color:var(--green3)}
+.ai-strip-sub{font-size:14px;color:rgba(255,255,255,.55);line-height:1.65;margin-bottom:24px}
+.ai-feature-list{display:flex;flex-direction:column;gap:12px}
+.ai-feature-item{display:flex;align-items:flex-start;gap:10px}
+.ai-feature-dot{width:6px;height:6px;border-radius:50%;background:var(--green3);flex-shrink:0;margin-top:6px}
+.ai-feature-text{font-size:13px;color:rgba(255,255,255,.65);line-height:1.5}
+.ai-feature-text strong{color:rgba(255,255,255,.9)}
+.ai-strip-right{display:flex;flex-direction:column;gap:10px}
+.ai-card-preview{
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);
+  border-radius:11px;padding:14px 16px;cursor:pointer;transition:all .2s;
+}
+.ai-card-preview:hover{background:rgba(255,255,255,.1);border-color:rgba(29,184,136,.4);transform:translateX(3px)}
+.ai-card-preview-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px}
+.ai-card-preview-label{font-size:11px;font-weight:600;color:var(--green3);text-transform:uppercase;letter-spacing:.06em}
+.ai-card-preview-arrow{font-size:13px;color:rgba(255,255,255,.3);transition:color .2s}
+.ai-card-preview:hover .ai-card-preview-arrow{color:var(--green3)}
+.ai-card-preview-title{font-size:14px;font-weight:600;color:#fff;margin-bottom:3px}
+.ai-card-preview-sub{font-size:12px;color:rgba(255,255,255,.45)}
+.btn-try-ai{
+  margin-top:6px;padding:12px 22px;background:var(--green2);color:#fff;border:none;
+  border-radius:9px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--font);
+  width:100%;transition:background .15s;letter-spacing:-.01em;
+}
+.btn-try-ai:hover{background:var(--green3);color:var(--navy)}
+
+/* ─── PRODUCTS ─── */
+.products{background:var(--bg);padding:80px 40px}
+.products-inner{max-width:1100px;margin:0 auto}
+.product-row{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;padding:56px 0;border-bottom:1px solid var(--border)}
+.product-row:first-child{padding-top:0}
+.product-row:last-child{border-bottom:none;padding-bottom:0}
+.product-row.reverse .product-text{order:2}
+.product-row.reverse .product-visual{order:1}
+.product-tag{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--green);margin-bottom:10px}
+.product-h3{font-size:26px;font-weight:700;color:var(--navy);letter-spacing:-.02em;line-height:1.2;margin-bottom:10px}
+.product-desc{font-size:14px;color:var(--text2);line-height:1.65;margin-bottom:20px}
+.product-link{display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:600;color:var(--green);text-decoration:none;transition:gap .15s}
+.product-link:hover{gap:10px}
+.product-visual{background:var(--navy);border-radius:14px;height:220px;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+.product-visual-inner{text-align:center;padding:24px}
+.product-visual-amount{font-size:36px;font-weight:700;color:#fff;letter-spacing:-.02em}
+.product-visual-label{font-size:13px;color:rgba(255,255,255,.5);margin-top:4px}
+.product-visual-bar{height:4px;background:rgba(255,255,255,.1);border-radius:2px;margin-top:16px;overflow:hidden}
+.product-visual-fill{height:100%;border-radius:2px;background:var(--green3);width:72%}
+
+/* ─── CTA ─── */
+.cta-section{background:var(--navy);padding:80px 40px;text-align:center}
+.cta-inner{max-width:560px;margin:0 auto}
+.cta-h2{font-size:34px;font-weight:700;color:#fff;letter-spacing:-.02em;margin-bottom:12px}
+.cta-sub{font-size:15px;color:rgba(255,255,255,.55);line-height:1.6;margin-bottom:28px}
+.cta-actions{display:flex;gap:12px;justify-content:center}
+
+/* ─── FOOTER ─── */
+.footer{background:var(--navy);border-top:1px solid rgba(255,255,255,.07);padding:32px 40px}
+.footer-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.footer-logo{display:flex;align-items:center;gap:8px}
+.footer-logo-text{font-size:15px;font-weight:700;color:#fff;letter-spacing:-.02em}
+.footer-links{display:flex;gap:20px}
+.footer-link{font-size:13px;color:rgba(255,255,255,.4);text-decoration:none;transition:color .15s}
+.footer-link:hover{color:rgba(255,255,255,.7)}
+.footer-copy{font-size:12px;color:rgba(255,255,255,.25)}
+
+/* ═══════════════════════════════════════
+   MODAL OVERLAY
+═══════════════════════════════════════ */
+.modal-overlay{
+  position:fixed;inset:0;z-index:1000;
+  background:rgba(10,37,64,.7);
+  backdrop-filter:blur(6px);
+  display:flex;align-items:flex-start;justify-content:center;
+  padding:24px 16px 24px;
+  opacity:0;pointer-events:none;transition:opacity .25s;
+  overflow-y:auto;
+}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal{
+  background:var(--white);border-radius:16px;
+  width:100%;max-width:900px;
+  box-shadow:0 24px 80px rgba(10,37,64,.3);
+  transform:translateY(16px) scale(.98);
+  transition:transform .25s;
+  overflow:hidden;flex-shrink:0;
+  margin:auto;
+}
+.modal-overlay.open .modal{transform:translateY(0) scale(1)}
+
+.modal-header{
+  background:var(--navy);padding:18px 24px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.modal-header-left{display:flex;align-items:center;gap:10px}
+.modal-header-eyebrow{
+  font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--green3);
+}
+.modal-header-title{font-size:16px;font-weight:600;color:#fff;margin-top:2px}
+.modal-close{
+  width:32px;height:32px;border-radius:8px;
+  background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);
+  color:rgba(255,255,255,.6);cursor:pointer;font-size:16px;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .15s;font-family:var(--font);
+}
+.modal-close:hover{background:rgba(255,255,255,.15);color:#fff}
+.modal-tabs{
+  background:#f8fafc;border-bottom:1px solid var(--border);
+  padding:0 24px;display:flex;gap:4px;
+}
+.modal-tab{
+  padding:13px 16px;font-size:13px;font-weight:500;
+  border:none;background:transparent;cursor:pointer;font-family:var(--font);
+  color:var(--text3);border-bottom:2px solid transparent;transition:all .15s;
+  margin-bottom:-1px;
+}
+.modal-tab.active{color:var(--navy);border-bottom-color:var(--green)}
+.modal-tab:hover:not(.active){color:var(--text)}
+.modal-body{padding:24px}
+.modal-panel{display:none}
+.modal-panel.active{display:block}
+
+/* ─── FIT ENGINE ─── */
+.fit-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:640px){.fit-grid{grid-template-columns:1fr}}
+.field-label{font-size:12px;font-weight:500;color:var(--text2);margin-bottom:6px}
+.fit-textarea{
+  width:100%;border:1.5px solid var(--border);border-radius:9px;
+  padding:12px 14px;font-size:13px;font-family:var(--font);
+  resize:none;height:110px;color:var(--text);line-height:1.55;
+  background:var(--white);transition:border-color .15s;
+}
+.fit-textarea:focus{outline:none;border-color:var(--green)}
+.fit-textarea::placeholder{color:var(--text3);font-size:13px}
+.fit-selects{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:10px}
+.fit-select{
+  border:1.5px solid var(--border);border-radius:8px;padding:9px 12px;
+  font-size:13px;font-family:var(--font);color:var(--text);background:var(--white);
+  width:100%;cursor:pointer;
+  appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%238a97a4' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 10px center;padding-right:28px;
+}
+.fit-select:focus{outline:none;border-color:var(--green)}
+.btn-analyze{
+  margin-top:12px;width:100%;padding:11px;background:var(--navy);color:#fff;
+  border:none;border-radius:9px;font-size:14px;font-weight:600;cursor:pointer;
+  font-family:var(--font);transition:background .15s;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.btn-analyze:hover{background:var(--navy2)}
+.btn-analyze:disabled{background:#cbd5e0;cursor:not-allowed}
+
+.result-shell{
+  border:1px solid var(--border);border-radius:10px;
+  min-height:300px;display:flex;flex-direction:column;overflow:hidden;
+}
+.result-empty{
+  flex:1;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:8px;text-align:center;padding:24px;
+}
+.result-empty-icon{width:42px;height:42px;border-radius:10px;background:var(--green-pale);display:flex;align-items:center;justify-content:center;font-size:20px}
+.result-empty p{font-size:13px;color:var(--text3);max-width:180px;line-height:1.5}
+.result-loading{flex:1;display:none;flex-direction:column;align-items:center;justify-content:center;gap:12px}
+.spinner{width:24px;height:24px;border:2.5px solid var(--border);border-top-color:var(--green);border-radius:50%;animation:spin .75s linear infinite}
+.result-loading p{font-size:13px;color:var(--text3)}
+.result-out{display:none;flex-direction:column;gap:12px;padding:16px}
+
+.product-chip{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:20px;font-size:12px;font-weight:500}
+.chip-primary{background:var(--navy);color:#fff}
+.chip-secondary{background:var(--green-pale);color:var(--green)}
+.conf-row{display:flex;align-items:center;gap:10px}
+.conf-track{flex:1;height:5px;background:var(--border2);border-radius:3px;overflow:hidden}
+.conf-fill{height:100%;background:var(--green);border-radius:3px;transition:width .6s ease}
+.conf-val{font-size:12px;font-weight:600;color:var(--green);font-family:var(--mono);white-space:nowrap}
+.savings-box{background:linear-gradient(135deg,var(--green-pale2),var(--green-pale));border:1px solid rgba(15,110,86,.15);border-radius:10px;padding:14px 16px}
+.savings-amount{font-size:24px;font-weight:700;color:var(--green);letter-spacing:-.02em}
+.savings-sub{font-size:12px;color:var(--text2);margin-top:3px}
+.narrative-text{font-size:13px;line-height:1.65;color:var(--text2)}
+.divider{border:none;border-top:1px solid var(--border2);margin:2px 0}
+.sales-q{background:var(--blue-pale);border-radius:9px;padding:12px 14px}
+.sales-q-lbl{font-size:11px;font-weight:600;color:#3b82f6;text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px}
+.sales-q-text{font-size:13px;color:#1e40af;font-style:italic;line-height:1.5}
+.result-actions{display:flex;gap:8px;padding-top:2px}
+.btn-cta{padding:9px 18px;background:var(--green);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--font);transition:background .15s}
+.btn-cta:hover{background:var(--green2)}
+.btn-outline{padding:9px 16px;background:transparent;color:var(--text2);border:1.5px solid var(--border);border-radius:8px;font-size:13px;cursor:pointer;font-family:var(--font)}
+.btn-outline:hover{border-color:var(--text);color:var(--text)}
+
+/* ─── SUCCESS SUITE ─── */
+.merchant-bar{
+  background:var(--bg);border:1px solid var(--border);border-radius:10px;
+  padding:12px 16px;display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:10px;margin-bottom:16px;
+}
+.merchant-info{display:flex;align-items:center;gap:10px}
+.merchant-avatar{width:34px;height:34px;border-radius:8px;background:var(--navy);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff}
+.merchant-name{font-size:14px;font-weight:600;color:var(--navy)}
+.merchant-meta{font-size:12px;color:var(--text3);margin-top:1px}
+.status-pill{display:inline-flex;align-items:center;gap:5px;background:var(--green-pale);color:var(--green);padding:4px 10px;border-radius:20px;font-size:12px;font-weight:500}
+.pulse-dot{width:6px;height:6px;border-radius:50%;background:var(--green3);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+@media(max-width:580px){.kpi-row{grid-template-columns:repeat(2,1fr)}}
+.kpi{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:13px 15px}
+.kpi-val{font-size:20px;font-weight:700;color:var(--navy);letter-spacing:-.02em}
+.kpi-val.g{color:var(--green)}
+.kpi-lbl{font-size:11px;color:var(--text3);margin-top:2px}
+.kpi-delta{font-size:11px;font-weight:500;margin-top:4px}
+.kpi-delta.up{color:var(--green)}.kpi-delta.dn{color:var(--red)}
+.suite-tab-row{display:grid;grid-template-columns:repeat(4,1fr);gap:3px;background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:3px;margin-bottom:14px}
+.s-tab{padding:8px 4px;font-size:11px;font-weight:500;border:none;background:transparent;border-radius:7px;cursor:pointer;font-family:var(--font);color:var(--text3);transition:all .15s;text-align:center}
+.s-tab.active{background:var(--navy);color:#fff}
+.s-tab:hover:not(.active){background:var(--border2);color:var(--text)}
+.s-panel{display:none}.s-panel.active{display:block}
+.card{background:var(--white);border:1px solid var(--border);border-radius:11px;padding:16px}
+.card-lbl{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px}
+
+/* alerts */
+.alert-stack{display:flex;flex-direction:column;gap:9px}
+.alert{border:1px solid var(--border);border-radius:9px;padding:13px 14px;background:var(--white);display:flex;gap:11px;align-items:flex-start;position:relative;overflow:hidden}
+.alert::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px}
+.alert.hi::before{background:var(--red)}.alert.md::before{background:var(--amber)}.alert.lo::before{background:var(--green)}
+.alert-body{flex:1}
+.alert-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:3px}
+.alert-detail{font-size:12px;color:var(--text2);line-height:1.5}
+.alert-meta{font-size:11px;color:var(--text3);margin-top:4px;font-family:var(--mono)}
+.sev{flex-shrink:0;padding:3px 8px;border-radius:20px;font-size:11px;font-weight:600;align-self:flex-start}
+.sev.hi{background:var(--red-pale);color:var(--red)}.sev.md{background:var(--amber-pale);color:var(--amber)}.sev.lo{background:var(--green-pale);color:var(--green)}
+
+/* funnel */
+.frow{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border2)}
+.frow:last-child{border-bottom:none}
+.flbl{font-size:12px;color:var(--text2);min-width:170px}
+.ftrack{flex:1;height:7px;background:var(--border2);border-radius:4px;overflow:hidden}
+.ffill{height:100%;border-radius:4px;background:var(--green);transition:width .6s}
+.ffill.warn{background:var(--amber)}
+.fpct{font-size:12px;font-weight:600;color:var(--text);min-width:36px;text-align:right;font-family:var(--mono)}
+.fbench{font-size:11px;color:var(--text3);min-width:88px;text-align:right}
+.fwarn-text{color:var(--amber);font-weight:500}
+.rec-stack{display:flex;flex-direction:column;gap:9px;margin-top:12px}
+.rec{background:var(--blue-pale);border:1px solid rgba(59,130,246,.1);border-radius:9px;padding:13px;display:flex;gap:10px}
+.rec-num{width:22px;height:22px;background:var(--navy);color:#fff;border-radius:50%;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.rec-title{font-size:13px;font-weight:600;color:var(--navy)}
+.rec-lift{font-size:12px;color:var(--green);font-weight:500;margin-top:2px}
+.rec-desc{font-size:12px;color:var(--text2);margin-top:3px;line-height:1.5}
+
+/* report */
+.report-wrap{border:1px solid var(--border);border-radius:11px;overflow:hidden}
+.report-head{background:var(--navy);padding:16px 20px}
+.report-head-title{font-size:14px;font-weight:600;color:#fff}
+.report-head-sub{font-size:12px;color:rgba(255,255,255,.45);margin-top:2px}
+.report-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:14px 16px;background:var(--bg);border-bottom:1px solid var(--border)}
+.rk{text-align:center}
+.rk-val{font-size:18px;font-weight:700;color:var(--green)}
+.rk-lbl{font-size:11px;color:var(--text3);margin-top:2px}
+.report-body-inner{padding:14px 16px}
+.report-narrative{font-size:13px;line-height:1.7;color:var(--text2)}
+.report-narrative p+p{margin-top:9px}
+.ai-loading-row{display:flex;align-items:center;gap:9px;color:var(--text3);font-size:13px;padding:6px 0}
+.btn-gen{width:100%;padding:11px;background:var(--green);color:#fff;border:none;border-radius:9px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--font);margin-top:12px;transition:background .15s}
+.btn-gen:hover{background:var(--green2)}.btn-gen:disabled{background:#a0aec0;cursor:not-allowed}
+
+/* churn */
+.churn-stack{display:flex;flex-direction:column;gap:9px}
+.churn-item{background:var(--white);border:1px solid var(--border);border-radius:9px;padding:12px 14px;display:flex;align-items:center;gap:12px}
+.churn-av{width:34px;height:34px;border-radius:8px;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--text2);flex-shrink:0;border:1px solid var(--border)}
+.churn-info{flex:1;min-width:0}
+.churn-name{font-size:13px;font-weight:600;color:var(--navy)}
+.churn-sigs{font-size:12px;color:var(--text3);margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.churn-right{display:flex;align-items:center;gap:10px}
+.cpct{font-size:18px;font-weight:700;letter-spacing:-.02em}
+.cpct.rh{color:var(--red)}.cpct.rm{color:var(--amber)}.cpct.rl{color:var(--green)}
+.cpct-lbl{font-size:11px;color:var(--text3);margin-top:1px}
+.btn-out{padding:6px 12px;border:1.5px solid var(--border);border-radius:7px;font-size:12px;font-weight:500;cursor:pointer;font-family:var(--font);background:var(--white);color:var(--text2);white-space:nowrap;transition:all .15s}
+.btn-out:hover:not(:disabled){border-color:var(--navy);color:var(--navy)}
+.btn-out:disabled{opacity:.35;cursor:default}
+.info-note{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:11px 13px;font-size:12px;color:var(--text3);line-height:1.6;margin-top:11px}
+.info-note strong{color:var(--text2)}
+
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.fade-up{animation:fadeUp .3s ease forwards}
+</style>
+</head>
+<body>
+
+<!-- ─── NAV ─── -->
+<nav class="nav">
+  <a class="nav-logo" href="#">
+    <div class="nav-logo-icon">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 3L20 7.5V16.5L12 21L4 16.5V7.5L12 3Z" stroke="white" stroke-width="1.8" stroke-linejoin="round"/>
+        <path d="M12 3V21M4 7.5L20 16.5M20 7.5L4 16.5" stroke="white" stroke-width="1.2" stroke-opacity=".4"/>
+      </svg>
+    </div>
+    <span class="nav-logo-text">Link Money</span>
+  </a>
+  <div class="nav-links">
+    <a class="nav-link" href="#">Products</a>
+    <a class="nav-link" href="#">Developers</a>
+    <a class="nav-link" href="#">Use Cases</a>
+    <a class="nav-link" href="#">About</a>
+  </div>
+  <div class="nav-right">
+    <button class="nav-btn-ghost" onclick="openModal('fit')">Try Fit Engine ✦</button>
+    <button class="nav-btn-primary">Get started</button>
+  </div>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="hero-eyebrow"><div class="hero-eyebrow-dot"></div>Open Banking Payments</div>
+      <h1 class="hero-h1">Secure, low-cost<br>payments, powered by<br><span>Open Banking</span></h1>
+      <p class="hero-sub">Enable your customers to easily pay with their bank account, while reducing fees by 70–80%.</p>
+      <div class="hero-actions">
+        <button class="btn-hero-primary" onclick="document.querySelector('.nav-btn-primary').click()">Get started</button>
+        <button class="btn-hero-ai" onclick="openModal('fit')">
+          <span class="ai-spark">✦</span>Find your product fit
+        </button>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="stat-card">
+        <div class="stat-card-val"><span>70–80%</span></div>
+        <div class="stat-card-lbl">reduction in processing fees with Pay by Bank</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-val">95<span>%</span></div>
+        <div class="stat-card-lbl">of US bank accounts covered</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-val" style="font-size:20px">Real-time</div>
+        <div class="stat-card-lbl">fund guarantee on accepted transactions — Link Money makes you whole</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── WHY ─── -->
+<section class="why">
+  <div class="why-inner">
+    <div class="section-label">Why Link Money</div>
+    <h2 class="section-h2">Built for modern payments</h2>
+    <p class="section-sub">Everything you need to accept bank payments — lower costs, better security, and tools that improve over time.</p>
+    <div class="why-grid">
+      <div class="why-card"><div class="why-icon">💰</div><div class="why-title">Reduce your payment costs</div><div class="why-desc">Pay by Bank reduces processing fees by 70–80%. No interchange, no card network surcharges.</div></div>
+      <div class="why-card"><div class="why-icon">⚡</div><div class="why-title">Fast to get started</div><div class="why-desc">Integration is quick and easy. Add a few lines of code and you're live across web and mobile.</div></div>
+      <div class="why-card"><div class="why-icon">📱</div><div class="why-title">Payments across all devices</div><div class="why-desc">Our SDKs are compatible with web, mobile, and native apps so you can reach every customer.</div></div>
+      <div class="why-card"><div class="why-icon">🔒</div><div class="why-title">Bank-grade security</div><div class="why-desc">SOC 2 certified. OAuth-based linking. We never store or see your customers' bank credentials.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── AI FEATURES STRIP ─── -->
+<section class="ai-strip">
+  <div class="ai-strip-inner">
+    <div class="ai-strip-left">
+      <div class="ai-strip-eyebrow">✦ New — AI Features</div>
+      <h2 class="ai-strip-h2">Intelligence built into<br>every step of <span>your journey</span></h2>
+      <p class="ai-strip-sub">Two new AI-powered tools — one to find your fit before you ever talk to sales, one to help you get more from Pay by Bank after you're live.</p>
+      <div class="ai-feature-list">
+        <div class="ai-feature-item"><div class="ai-feature-dot"></div><div class="ai-feature-text"><strong>Merchant Fit Engine.</strong> Describe your business in plain language. The AI maps your situation to the right products and estimates your savings — so your first sales conversation starts at evaluation, not discovery.</div></div>
+        <div class="ai-feature-item"><div class="ai-feature-dot"></div><div class="ai-feature-text"><strong>Success Suite.</strong> Anomaly detection on your transaction patterns, AI-ranked adoption recommendations, a monthly CFO savings report, and a churn prediction signal — all post-onboarding, all proactive.</div></div>
+      </div>
+    </div>
+    <div class="ai-strip-right">
+      <div class="ai-card-preview" onclick="openModal('fit')">
+        <div class="ai-card-preview-top">
+          <div class="ai-card-preview-label">✦ Feature 1</div>
+          <div class="ai-card-preview-arrow">→</div>
+        </div>
+        <div class="ai-card-preview-title">Merchant Fit Engine</div>
+        <div class="ai-card-preview-sub">RAG-powered product matching · Live savings estimate · Sales handoff</div>
+      </div>
+      <div class="ai-card-preview" onclick="openModal('suite')">
+        <div class="ai-card-preview-top">
+          <div class="ai-card-preview-label">✦ Feature 4</div>
+          <div class="ai-card-preview-arrow">→</div>
+        </div>
+        <div class="ai-card-preview-title">Success Suite</div>
+        <div class="ai-card-preview-sub">Anomaly detection · Adoption intel · CFO report · Churn signals</div>
+      </div>
+      <button class="btn-try-ai" onclick="openModal('fit')">Try the demos →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PRODUCTS ─── -->
+<section class="products">
+  <div class="products-inner">
+    <div class="section-label">Products</div>
+    <h2 class="section-h2">Everything you need</h2>
+    <p class="section-sub">From payment acceptance to account verification, data insights, and payouts.</p>
+    <div class="product-row">
+      <div class="product-text">
+        <div class="product-tag">Pay by Bank</div>
+        <h3 class="product-h3">Streamlined and low-cost payment alternative</h3>
+        <p class="product-desc">Enable your customers to pay with a real-time funds guarantee. Eliminate interchange fees, reduce chargebacks, and offer a faster checkout experience across all devices.</p>
+        <a class="product-link" href="#">Start with Pay by Bank →</a>
+      </div>
+      <div class="product-visual">
+        <div class="product-visual-inner">
+          <div class="product-visual-amount">$1,240<span style="font-size:16px;opacity:.5">/mo</span></div>
+          <div class="product-visual-label">Saved in processing fees</div>
+          <div class="product-visual-bar"><div class="product-visual-fill"></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="product-row reverse">
+      <div class="product-text">
+        <div class="product-tag">AccountVerify</div>
+        <h3 class="product-h3">Verify your customers' bank accounts quickly</h3>
+        <p class="product-desc">A fast, easy verification solution to ensure that your customers are connecting real bank accounts, while remaining Nacha-compliant.</p>
+        <a class="product-link" href="#">Start with AccountVerify →</a>
+      </div>
+      <div class="product-visual" style="background:#0d3a2a">
+        <div class="product-visual-inner">
+          <div style="font-size:32px;font-weight:700;color:#fff">✓</div>
+          <div class="product-visual-label">Account verified in &lt;1s</div>
+        </div>
+      </div>
+    </div>
+    <div class="product-row">
+      <div class="product-text">
+        <div class="product-tag">Dynamic Links</div>
+        <h3 class="product-h3">Easy, no-code payment solution</h3>
+        <p class="product-desc">Generate and share payment links with your customers via SMS or email. No checkout required — perfect for out-of-session billing and invoicing.</p>
+        <a class="product-link" href="#">Start with Dynamic Links →</a>
+      </div>
+      <div class="product-visual" style="background:#1a2e4a">
+        <div class="product-visual-inner">
+          <div style="font-size:13px;color:rgba(255,255,255,.5);margin-bottom:6px">Payment link sent via SMS</div>
+          <div style="background:rgba(255,255,255,.08);border-radius:8px;padding:10px 14px;font-size:13px;color:#fff">Pay $240.00 to Northside Supply →</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CTA ─── -->
+<section class="cta-section">
+  <div class="cta-inner">
+    <h2 class="cta-h2">Ready to get started?</h2>
+    <p class="cta-sub">Get in touch now to find out how to start accepting payments with Link Money.</p>
+    <div class="cta-actions">
+      <button class="btn-hero-primary">Start now</button>
+      <button class="btn-hero-ai" onclick="openModal('fit')"><span class="ai-spark">✦</span>Find your fit first</button>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-logo">
+      <div class="nav-logo-icon" style="width:26px;height:26px">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:14px;height:14px"><path d="M12 3L20 7.5V16.5L12 21L4 16.5V7.5L12 3Z" stroke="white" stroke-width="1.8" stroke-linejoin="round"/></svg>
+      </div>
+      <span class="footer-logo-text">Link Money</span>
+    </div>
+    <div class="footer-links">
+      <a class="footer-link" href="#">Products</a>
+      <a class="footer-link" href="#">Developers</a>
+      <a class="footer-link" href="#">Use Cases</a>
+      <a class="footer-link" href="#">About</a>
+      <a class="footer-link" href="#">Careers</a>
+    </div>
+    <div class="footer-copy">© 2026 Link Money. All rights reserved.</div>
+  </div>
+</footer>
+
+<!-- ═══════ MODAL ═══════ -->
+<div class="modal-overlay" id="modalOverlay" onclick="handleOverlayClick(event)">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <div class="modal-header-left">
+        <div>
+          <div class="modal-header-eyebrow" id="modalEyebrow">✦ AI Feature</div>
+          <div class="modal-header-title" id="modalTitle">Merchant Fit Engine</div>
+        </div>
+      </div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-tabs">
+      <button class="modal-tab active" id="tabFit" onclick="switchModalTab('fit')">✦ Merchant Fit Engine</button>
+      <button class="modal-tab" id="tabSuite" onclick="switchModalTab('suite')">✦ Success Suite</button>
+    </div>
+    <div class="modal-body">
+
+      <!-- FIT ENGINE PANEL -->
+      <div class="modal-panel active" id="panelFit">
+        <p style="font-size:13px;color:var(--text2);margin-bottom:16px;line-height:1.6">Describe your business below. The AI maps your situation to the right Link Money products, estimates your savings, and hands off a suggested first question to sales — so your discovery call starts at evaluation, not explanation.</p>
+        <div class="fit-grid">
+          <div>
+            <div class="field-label">Tell us about your business</div>
+            <textarea class="fit-textarea" id="fitInput" placeholder="e.g. We run a subscription box e-commerce platform with ~8,000 active subscribers paying $45/month. Currently on Stripe. Chargebacks on cancellations are eating into our margin…"></textarea>
+            <div class="fit-selects">
+              <select class="fit-select" id="fitVolume">
+                <option value="">Monthly volume</option>
+                <option value="under50k">Under $50K</option>
+                <option value="50k_500k">$50K – $500K</option>
+                <option value="500k_5m">$500K – $5M</option>
+                <option value="over5m">Over $5M</option>
+              </select>
+              <select class="fit-select" id="fitProcessor">
+                <option value="">Current processor</option>
+                <option value="stripe">Stripe (2.9% + $0.30)</option>
+                <option value="paypal">PayPal (3.49% + $0.49)</option>
+                <option value="square">Square (2.6% + $0.10)</option>
+                <option value="braintree">Braintree (2.59% + $0.49)</option>
+                <option value="ach">Traditional ACH</option>
+                <option value="other">Other / Custom</option>
+              </select>
+            </div>
+            <button class="btn-analyze" id="fitBtn" onclick="runFit()">
+              Analyze my business
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+          <div class="result-shell">
+            <div class="result-empty" id="fitEmpty">
+              <div class="result-empty-icon">◎</div>
+              <p>Your product recommendation and savings estimate will appear here</p>
+            </div>
+            <div class="result-loading" id="fitLoading">
+              <div class="spinner"></div>
+              <p>Analyzing your business…</p>
+            </div>
+            <div class="result-out fade-up" id="fitOut"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUCCESS SUITE PANEL -->
+      <div class="modal-panel" id="panelSuite">
+        <div class="merchant-bar">
+          <div class="merchant-info">
+            <div class="merchant-avatar">NS</div>
+            <div>
+              <div class="merchant-name">Northside Supply Co.</div>
+              <div class="merchant-meta">Mid-size e-commerce · $1.8M/mo · Pay by Bank since Jan 2026</div>
+            </div>
+          </div>
+          <div class="status-pill"><div class="pulse-dot"></div>Pay by Bank Active</div>
+        </div>
+        <div class="kpi-row">
+          <div class="kpi"><div class="kpi-val g">24.3%</div><div class="kpi-lbl">PbB adoption</div><div class="kpi-delta up">↑ 3.1 pts</div></div>
+          <div class="kpi"><div class="kpi-val">$41,200</div><div class="kpi-lbl">Saved this month</div><div class="kpi-delta up">↑ 12%</div></div>
+          <div class="kpi"><div class="kpi-val">6,840</div><div class="kpi-lbl">PbB transactions</div><div class="kpi-delta up">↑ 18% WoW</div></div>
+          <div class="kpi"><div class="kpi-val g">0.4%</div><div class="kpi-lbl">Return rate</div><div class="kpi-delta up">↓ vs 1.8% on cards</div></div>
+        </div>
+        <div class="suite-tab-row">
+          <button class="s-tab active" onclick="switchSuite('anomaly',this)">⚡ Anomaly</button>
+          <button class="s-tab" onclick="switchSuite('adoption',this)">📈 Adoption</button>
+          <button class="s-tab" onclick="switchSuite('report',this)">📄 CFO Report</button>
+          <button class="s-tab" onclick="switchSuite('churn',this)">🔔 Churn</button>
+        </div>
+
+        <div class="s-panel active" id="sp-anomaly">
+          <div class="card">
+            <div class="card-lbl">Active alerts — last 72 hours</div>
+            <div class="alert-stack">
+              <div class="alert hi"><div class="alert-body"><div class="alert-title">Mobile completion rate dropped 31% vs. 30-day baseline</div><div class="alert-detail">PbB checkout completions on mobile fell from 68% to 47% between Tuesday 11pm and Wednesday 8am. This pattern preceded increased cart abandonment in 7 of 9 similar merchants.</div><div class="alert-meta">Detected 6h ago · Review mobile SDK version and OAuth timeout settings</div></div><span class="sev hi">High</span></div>
+              <div class="alert md"><div class="alert-body"><div class="alert-title">Return rate on $200–$400 orders up 2.1× this week</div><div class="alert-detail">Return rate in this band moved from 0.3% to 0.63%. Isolated to this transaction cohort — other sizes within normal range.</div><div class="alert-meta">Detected 18h ago · Monitoring</div></div><span class="sev md">Medium</span></div>
+              <div class="alert lo"><div class="alert-body"><div class="alert-title">PbB volume up 18% week-over-week — positive deviation</div><div class="alert-detail">Volume increase above seasonal expectation (+6% expected). Likely driven by checkout placement update made last Thursday.</div><div class="alert-meta">Detected 2d ago · Sustained for 5 days</div></div><span class="sev lo">Info</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="s-panel" id="sp-adoption">
+          <div class="card">
+            <div class="card-lbl">Checkout funnel — Pay by Bank</div>
+            <div class="frow"><div class="flbl">PbB option shown</div><div class="ftrack"><div class="ffill" style="width:100%"></div></div><div class="fpct">100%</div><div class="fbench">Peer: 100%</div></div>
+            <div class="frow"><div class="flbl">Customer selects PbB</div><div class="ftrack"><div class="ffill" style="width:38%"></div></div><div class="fpct">38%</div><div class="fbench">Peer: 41%</div></div>
+            <div class="frow"><div class="flbl">Bank linking initiated</div><div class="ftrack"><div class="ffill warn" style="width:62%"></div></div><div class="fpct">62%</div><div class="fbench"><span class="fwarn-text">Peer: 79% ⚠</span></div></div>
+            <div class="frow"><div class="flbl">Bank linking completed</div><div class="ftrack"><div class="ffill warn" style="width:71%"></div></div><div class="fpct">71%</div><div class="fbench"><span class="fwarn-text">Peer: 82% ⚠</span></div></div>
+            <div class="frow"><div class="flbl">Payment confirmed</div><div class="ftrack"><div class="ffill" style="width:96%"></div></div><div class="fpct">96%</div><div class="fbench">Peer: 95%</div></div>
+          </div>
+          <div class="card" style="margin-top:12px">
+            <div class="card-lbl">AI-ranked recommendations</div>
+            <div class="rec-stack">
+              <div class="rec"><div class="rec-num">1</div><div><div class="rec-title">Add a trust message at the bank linking step</div><div class="rec-lift">+14% avg completion rate in comparable merchants</div><div class="rec-desc">Adding "Your credentials are never stored or seen by us" at the OAuth screen produced the largest single-intervention lift in linking completion for merchants at your volume.</div></div></div>
+              <div class="rec"><div class="rec-num">2</div><div><div class="rec-title">Surface Pay by Bank before card options</div><div class="rec-lift">+9% avg PbB selection rate in comparable merchants</div><div class="rec-desc">Moving PbB above card entry fields increased selection rate without reducing overall checkout completion across 12 merchants in your cohort.</div></div></div>
+              <div class="rec"><div class="rec-num">3</div><div><div class="rec-title">Offer a one-time incentive on first PbB use</div><div class="rec-lift">+22% first-time PbB conversion in comparable merchants</div><div class="rec-desc">A $5 discount or free shipping on the first Pay by Bank transaction converts hesitant first-timers. Repeat PbB usage after the first transaction is high.</div></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="s-panel" id="sp-report">
+          <div class="report-wrap">
+            <div class="report-head"><div class="report-head-title">Northside Supply Co. — Pay by Bank Savings Report</div><div class="report-head-sub">May 2026 · Generated by Link Money Success Suite</div></div>
+            <div class="report-kpis">
+              <div class="rk"><div class="rk-val">$41,200</div><div class="rk-lbl">Fees saved this month</div></div>
+              <div class="rk"><div class="rk-val">$3,187</div><div class="rk-lbl">Chargebacks avoided</div></div>
+              <div class="rk"><div class="rk-val">$203,400</div><div class="rk-lbl">YTD cumulative savings</div></div>
+            </div>
+            <div class="report-body-inner">
+              <div id="reportContent">
+                <button class="btn-gen" id="genBtn" onclick="generateReport()">Generate AI narrative summary →</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="s-panel" id="sp-churn">
+          <div class="card">
+            <div class="card-lbl">Merchant cohort — churn risk scores</div>
+            <div class="churn-stack">
+              <div class="churn-item"><div class="churn-av">GH</div><div class="churn-info"><div class="churn-name">Greenhill Home Goods</div><div class="churn-sigs">Adoption down 38% over 30d · 3 support tickets · last login 9 days ago</div></div><div class="churn-right"><div><div class="cpct rh">81%</div><div class="cpct-lbl">churn risk</div></div><button class="btn-out">Outreach →</button></div></div>
+              <div class="churn-item"><div class="churn-av">PR</div><div class="churn-info"><div class="churn-name">Primrose Running Co.</div><div class="churn-sigs">Volume down 22% over 14d · 1 support ticket · evaluating competitor</div></div><div class="churn-right"><div><div class="cpct rm">54%</div><div class="cpct-lbl">churn risk</div></div><button class="btn-out">Outreach →</button></div></div>
+              <div class="churn-item"><div class="churn-av" style="background:var(--green-pale);color:var(--green);border-color:rgba(15,110,86,.2)">NS</div><div class="churn-info"><div class="churn-name">Northside Supply Co. <span style="font-size:11px;color:var(--text3);font-weight:400">(current)</span></div><div class="churn-sigs">Adoption stable · volume growing · 0 support tickets last 30d</div></div><div class="churn-right"><div><div class="cpct rl">12%</div><div class="cpct-lbl">churn risk</div></div><button class="btn-out" disabled>Healthy</button></div></div>
+            </div>
+            <div class="info-note"><strong>About these scores.</strong> Churn risk is modeled on behavioral signals: PbB adoption trend, transaction volume trajectory, support contact frequency, login recency, and deviation from each merchant's own historical baseline. Scores update weekly. Merchants above 60% are prioritized for proactive outreach.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+const PRODUCTS={
+  payByBank:{name:'Pay by Bank',desc:'Customers pay directly from their bank account at checkout. Three layers: bank account linking via OAuth, behavioral decisioning using balances and chargeback signals, and ACH-based money movement. Eliminates interchange, includes Link Guarantee. Best for repeat customers, subscription billing, e-commerce, and merchants with high card fees or chargeback exposure.'},
+  accountVerify:{name:'AccountVerify',desc:'Fast, Nacha-compliant bank account verification. Confirms a customer is connecting a real, funded account. Used by lenders and platforms that need to verify accounts before initiating payments.'},
+  dynamicLinks:{name:'Dynamic Links',desc:'No-code payment links sent via SMS or email. Customers complete bank-based payment without visiting a web checkout. For out-of-session billing, invoicing, or businesses without a digital checkout flow.'},
+  payouts:{name:'Payouts',desc:'Outbound payments to customer or contractor bank accounts. Same-day settlement to 95% of US banks. For gig platforms, insurance carriers, lenders, and any business that moves money out as well as in.'},
+  indicators:{name:'Indicators',desc:'Risk signals and data insights from Open Banking data — balances, transaction history, behavioral patterns. For fraud teams, lenders, and merchants building custom risk models.'}
+};
+const FEE={stripe:{pct:2.9,fixed:.30},paypal:{pct:3.49,fixed:.49},square:{pct:2.6,fixed:.10},braintree:{pct:2.59,fixed:.49},ach:{pct:.8,fixed:.25},other:{pct:2.75,fixed:.30}};
+const LM={pct:1.5,fixed:.50};
+
+function openModal(tab){
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+  switchModalTab(tab);
+}
+function closeModal(){
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+function handleOverlayClick(e){
+  if(e.target===document.getElementById('modalOverlay'))closeModal();
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+
+function switchModalTab(id){
+  ['fit','suite'].forEach(t=>{
+    document.getElementById('panel'+t.charAt(0).toUpperCase()+t.slice(1)).classList.toggle('active',t===id);
+    document.getElementById('tab'+t.charAt(0).toUpperCase()+t.slice(1)).classList.toggle('active',t===id);
+  });
+  const labels={fit:['✦ Feature 1','Merchant Fit Engine'],suite:['✦ Feature 4','Success Suite']};
+  document.getElementById('modalEyebrow').textContent=labels[id][0];
+  document.getElementById('modalTitle').textContent=labels[id][1];
+}
+
+function switchSuite(id,btn){
+  document.querySelectorAll('.s-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.s-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('sp-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+
+async function runFit(){
+  const input=document.getElementById('fitInput').value.trim();
+  if(!input){alert('Please describe your business first.');return;}
+  const vol=document.getElementById('fitVolume').value;
+  const proc=document.getElementById('fitProcessor').value;
+  document.getElementById('fitEmpty').style.display='none';
+  document.getElementById('fitLoading').style.display='flex';
+  document.getElementById('fitOut').style.display='none';
+  document.getElementById('fitBtn').disabled=true;
+  const volLabel={under50k:'under $50K','50k_500k':'$50K–$500K','500k_5m':'$500K–$5M',over5m:'over $5M'}[vol]||'unspecified';
+  const sys=`You are the Link Money Merchant Fit Engine. Link Money is a US-focused open banking payments company.
+
+Products:
+1. Pay by Bank: Customers pay directly from bank account at checkout. Layers: (a) bank linking via OAuth, (b) behavioral decisioning using balances, transaction history, chargeback signals — includes Link Guarantee (if Link Money accepts a transaction and customer can't pay, Link Money makes merchant whole), (c) ACH money movement. Link Money charges ~1.5% + $0.50 flat vs typical card rates of 2–4%. Best for: repeat customers, subscription billing, e-commerce, insurance premiums, lending repayments, utilities.
+2. AccountVerify: Nacha-compliant bank account verification before transactions. For lenders and platforms needing pre-payment account verification.
+3. Dynamic Links: No-code payment links via SMS/email for out-of-session billing. No checkout required.
+4. Payouts: Outbound bank payments to customers/contractors. Same-day to 95% of US banks. For gig platforms, insurance, lenders.
+5. Indicators: Open Banking risk signals — balances, behavior, transaction history — for fraud teams and custom risk models.
+
+Return ONLY valid JSON, no markdown, with this shape:
+{"primaryProduct":"payByBank|accountVerify|dynamicLinks|payouts|indicators","secondaryProducts":["keys"],"fitScore":0-100,"fitReason":"2-3 sentences","savingsAngle":"specific cost or problem","suggestedQuestion":"one question for sales rep","flags":[]}`;
+  let d=null;
+  try{
+    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,system:sys,messages:[{role:'user',content:`Business: ${input}\nVolume: ${volLabel}\nProcessor: ${proc||'unspecified'}`}]})});
+    const j=await r.json();
+    d=JSON.parse(j.content.filter(b=>b.type==='text').map(b=>b.text).join('').replace(/```json|```/g,'').trim());
+  }catch(e){
+    d={primaryProduct:'payByBank',secondaryProducts:[],fitScore:74,fitReason:'Pay by Bank directly addresses the cost and chargeback issues described. The behavioral decisioning layer is purpose-built for repeat-customer scenarios.',savingsAngle:'Interchange elimination and chargeback reduction',suggestedQuestion:'What percentage of your customers are repeat buyers vs. first-time?',flags:['AI unavailable — showing estimated result']};
+  }
+  renderFit(d,vol,proc);
+}
+
+function renderFit(d,vol,proc){
+  const rates=FEE[proc]||FEE.other;
+  const volMap={under50k:25000,'50k_500k':250000,'500k_5m':2500000,over5m:7500000};
+  const mv=volMap[vol]||0;
+  const n=mv/80;
+  const cur=mv*(rates.pct/100)+n*rates.fixed;
+  const lm=mv*(LM.pct/100)+n*LM.fixed;
+  const saved=Math.max(0,cur-lm);
+  const pct=cur>0?Math.round((saved/cur)*100):72;
+  const primary=PRODUCTS[d.primaryProduct]||PRODUCTS.payByBank;
+  const secTags=(d.secondaryProducts||[]).filter(p=>PRODUCTS[p]).map(p=>`<span class="product-chip chip-secondary">+ ${PRODUCTS[p].name}</span>`).join('');
+  const procName=document.getElementById('fitProcessor').options[document.getElementById('fitProcessor').selectedIndex].text.split(' ')[0]||'current processor';
+  document.getElementById('fitLoading').style.display='none';
+  document.getElementById('fitOut').style.display='flex';
+  document.getElementById('fitOut').innerHTML=`
+    <div style="display:flex;flex-wrap:wrap;gap:6px"><span class="product-chip chip-primary">${primary.name}</span>${secTags}</div>
+    <div>
+      <div style="font-size:11px;color:var(--text3);margin-bottom:4px;text-transform:uppercase;letter-spacing:.05em;font-weight:500">Fit confidence</div>
+      <div class="conf-row"><div class="conf-track"><div class="conf-fill" style="width:${d.fitScore}%"></div></div><div class="conf-val">${d.fitScore}%</div></div>
+    </div>
+    ${mv>0?`<div class="savings-box"><div class="savings-amount">$${Math.round(saved).toLocaleString()}<span style="font-size:14px;font-weight:500">/mo</span></div><div class="savings-sub">vs. est. $${Math.round(cur).toLocaleString()}/mo on ${procName} · ${pct}% reduction</div></div>`:`<div class="savings-box"><div class="savings-amount">~70–80%</div><div class="savings-sub">estimated fee reduction · add volume above for a dollar estimate</div></div>`}
+    <div class="divider"></div>
+    <div class="narrative-text">${d.fitReason}</div>
+    ${d.flags&&d.flags.length?`<div style="font-size:12px;color:var(--text3)">⚠ ${d.flags.join(' · ')}</div>`:''}
+    <div class="divider"></div>
+    <div class="sales-q"><div class="sales-q-lbl">Suggested first question for sales</div><div class="sales-q-text">"${d.suggestedQuestion}"</div></div>
+    <div class="result-actions">
+      <button class="btn-cta" onclick="closeModal()">Request a demo →</button>
+      <button class="btn-outline" onclick="resetFit()">Try another</button>
+    </div>`;
+  document.getElementById('fitBtn').disabled=false;
+}
+function resetFit(){
+  document.getElementById('fitInput').value='';
+  document.getElementById('fitOut').style.display='none';
+  document.getElementById('fitEmpty').style.display='flex';
+}
+
+async function generateReport(){
+  const btn=document.getElementById('genBtn');
+  btn.disabled=true;btn.textContent='Generating…';
+  document.getElementById('reportContent').innerHTML=`<div class="ai-loading-row"><div class="spinner"></div><span>Writing your narrative summary…</span></div>`;
+  const prompt=`Write the narrative section of a monthly Pay by Bank savings report for Northside Supply Co., a mid-size e-commerce merchant. Data: monthly volume $1.8M, PbB adoption 24.3% (up 3.1 points month-over-month), fees saved $41,200 (up 12% vs prior month $36,800), chargebacks avoided $3,187, YTD savings $203,400, primary driver was a checkout placement update. Write exactly two concise paragraphs, no headers or bullets, for a CFO. First: what happened and what drove it. Second: YTD context and how to increase savings further. Use the numbers. Professional but readable. No em dashes.`;
+  let text='';
+  try{
+    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:400,messages:[{role:'user',content:prompt}]})});
+    const j=await r.json();
+    text=j.content.filter(b=>b.type==='text').map(b=>b.text).join('').trim();
+  }catch(e){
+    text='Northside Supply Co. saved $41,200 in payment processing fees in May 2026, a 12% improvement over April\'s $36,800. This increase was driven primarily by a 3.1-point rise in Pay by Bank adoption following a checkout placement update earlier in the month, shifting a larger share of transaction volume away from higher-cost card rails.\n\nYear-to-date, Northside has accumulated $203,400 in total savings since activating Pay by Bank. At current adoption rates, annualized savings are tracking toward approximately $490,000. Closing the gap between the current 24.3% adoption rate and the 32% peer benchmark would add an estimated $68,000 in additional annual savings, achievable through the trust message and checkout positioning improvements flagged in this month\'s adoption report.';
+  }
+  const paras=text.split(/\n\n+/).filter(Boolean);
+  document.getElementById('reportContent').innerHTML=`<div class="report-narrative fade-up">${paras.map(p=>`<p>${p}</p>`).join('')}</div>`;
+}
+</script>
+</body>
+</html>
